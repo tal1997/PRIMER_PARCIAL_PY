@@ -205,7 +205,7 @@ def funciones_menu(dicci: dict):
                 bono = bonus()
                 print(bono)
             
-              case "24":
+            case "24":
                 jugadores_posic = jugadores_por_posicion(dicci)
                 print(jugadores_posic)
                        
