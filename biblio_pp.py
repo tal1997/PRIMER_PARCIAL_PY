@@ -204,6 +204,24 @@ def funciones_menu(dicci: dict):
             case "23":
                 bono = bonus()
                 print(bono)
+            
+              case "24":
+                jugadores_posic = jugadores_por_posicion(dicci)
+                print(jugadores_posic)
+                       
+            case "25":
+                cant_allstar = cantidad_allstar(dicci)
+                for i in cant_allstar:
+                    print(i)            
+            
+            case "26":
+                jugadores_estadisticas_mayor = jugadores_por_max_estadistica(dicci)
+                for i in jugadores_estadisticas_mayor:
+                    print(i)
+            
+            case "27":
+                maximo_estadistica = maximo_jugador_estadisticas(dicci)
+                print("El jugador con mas estadisticas es: {0}".format(maximo_estadistica))
                 
             case "0":
                 exit()
@@ -417,3 +435,109 @@ def mayor_que_ingresado_posicion(dicci, dato_ingresado, estadist_ingresada): #FU
 def bonus():
     psiquis_en_corto = ("VALE POR UN BONITO CODIGO DE BONUS... SI TAN SOLO TUVIERA UNO!!!1!1!! :')")
     return psiquis_en_corto
+
+#####################################################
+
+
+#EXTRA JUGADOR POR POSICION
+def jugadores_por_posicion(dicci):
+    contador_base = 0
+    contador_escolta = 0
+    contador_alero = 0
+    contador_ala_pivot = 0
+    contador_pivot = 0
+  
+    for jugador in dicci:
+        if jugador["posicion"] == "Base":
+            contador_base +=1
+        elif jugador["posicion"] == "Escolta":
+            contador_escolta +=1
+        elif jugador["posicion"] == "Alero":
+            contador_alero +=1
+        elif jugador["posicion"] == "Ala-Pivot":
+            contador_ala_pivot +=1
+        elif jugador["posicion"] == "Pivot":
+            contador_pivot +=1
+            
+    return("BASES: {0}\nESCOLTAS: {1}\nALEROS: {2}\nALA-PIVOT {3}\nPIVOT: {4}".format(contador_base , contador_escolta , contador_alero , contador_ala_pivot , contador_pivot))
+
+#EXTRA ALL STAR DESCENDENTE
+def cantidad_allstar(dicci):
+    logros_jugadores = []
+    
+    for jugador in dicci:
+            for logros in jugador["logros"]:
+                    if "All-Star" in logros:
+                        nombre = jugador["nombre"]
+                        allstar = logros
+                        tupla = (nombre,allstar)
+                        logros_jugadores.append(tupla)
+                        
+    lista_alls_comparativa = []
+               
+    for jugador in logros_jugadores:
+        veces_allstar = int(jugador[1][0:2])
+        nombre = jugador[0]
+        allst = veces_allstar
+        tupla = (nombre, allst) 
+        lista_alls_comparativa.append(tupla)
+        
+    lista_ordenada = quicksort(lista_alls_comparativa)
+    lista_ordenada.reverse()
+    return lista_ordenada
+    
+def quicksort(lista):
+        pivote = lista[0]                               
+        menores = []                                    
+        mayores = []                                    
+
+        for x in lista[1:]:                             
+            if x[1] < pivote[1]:                        
+                menores.append(x)
+            else:
+                mayores.append(x)                       
+
+        menores_ordenados = quicksort_basico(menores)   
+        mayores_ordenados = quicksort_basico(mayores)   
+
+        lista_ordenada = []                             
+        lista_ordenada.extend(menores_ordenados)        
+        lista_ordenada.append(pivote)                   
+        lista_ordenada.extend(mayores_ordenados)        
+
+        return lista_ordenada
+        
+def jugadores_por_max_estadistica(dicci):
+    lista_estadisticas = []
+    for jugador in dicci:
+        for estadistica in jugador["estadisticas"]:
+            lista_estadisticas.append(estadistica)
+    
+    lista_estadisticas_filtradas = set(lista_estadisticas)
+    
+    lista_maximos = []
+    for estadistica in lista_estadisticas_filtradas:
+        maximo = buscar_maximo(dicci , estadistica)
+        lista_maximos.append(maximo)
+    
+    return lista_maximos
+
+def maximo_jugador_estadisticas(dicci):
+    max_jugador_estadisticas = None
+    max_estadisticas = 0
+    
+    for jugador in dicci:
+        total_estadist = 0
+        for estadistica in jugador["estadisticas"].values():
+            total_estadist += estadistica
+        if total_estadist > max_estadisticas:
+            max_jugador_estadisticas = jugador["nombre"]
+        
+    return (max_jugador_estadisticas)
+        
+    
+        
+    
+            
+        
+    
